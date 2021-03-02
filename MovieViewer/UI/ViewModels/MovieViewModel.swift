@@ -20,6 +20,10 @@ class MovieViewModel: Identifiable {
         return self.movie.fullTitle
     }
     
+    var imDbRating: String {
+        return self.movie.imDbRating
+    }
+    
     var rank: String {
         return self.movie.rank
     }

@@ -10,6 +10,7 @@ import Foundation
 struct Movie: Codable {
     let id: String
     let rank: String
+    let imDbRating: String
     let fullTitle: String
     let image: String
     let crew: String

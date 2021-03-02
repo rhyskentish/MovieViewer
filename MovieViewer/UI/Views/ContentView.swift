@@ -13,7 +13,7 @@ struct ContentView: View {
     
     var body: some View {
         List(viewModel.movies) { movie in
-            Text(movie.fullTitle)
+            MovieComponent(movie: movie)
         }
     }
 }
