@@ -20,13 +20,27 @@ class MovieListViewModel: ObservableObject {
     private func fetchAllMovies() {
         MovieService().getAllMovies { (result) in
             switch result {
-                case .success(let movieResponse):
-                    self.movies = movieResponse.items.map({ (movie) -> MovieViewModel in
-                        return MovieViewModel.init(movie: movie)
-                    })
-                case .failure(let error):
-                    self.error = error.localizedDescription
+            case .success(let movieResponse):
+                self.movies = movieResponse.items.map({ (movie) -> MovieViewModel in
+                    return MovieViewModel.init(movie: movie)
+                })
+            case .failure(let error):
+                self.error = error.localizedDescription
             }
+        }
+    }
+    
+    func limitMovies() {
+        let randomIndex = Int.random(in: 0..<246)
+        movies = Array(movies[randomIndex..<randomIndex+4])
+    }
+    
+    func deleteMovie(movie: MovieViewModel) {
+        let indexToRemove = movies.firstIndex { (movieToCheck) -> Bool in
+            return movie.id == movieToCheck.id
+        }
+        if let indexToRemove = indexToRemove {
+            movies.remove(at: indexToRemove)
         }
     }
     
