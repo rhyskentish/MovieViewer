@@ -12,24 +12,22 @@ struct ContentView: View {
     @ObservedObject var viewModel = MovieListViewModel()
     
     @State var limited = false
+    @State var editMode = EditMode.inactive
     
     var body: some View {
         NavigationView {
-            ScrollView(.vertical, showsIndicators: false, content: {
-                VStack(alignment: .center, spacing: .some(10), content: {
-                    ForEach(viewModel.movies) { movie in
-                        ZStack {
-                            MovieComponent(movie: movie, deleteMovie: deleteMovie(moive:))
-                                .animation(.easeInOut(duration: 0.3))
-                                .padding()
-                        }
-                    }
-                    .onMove(perform: moveItems(origin:destination:))
-                    
-                })
-            })
+            List{
+                ForEach(viewModel.movies) { movie in
+                    MovieComponent(movie: movie, isEditing: self.editMode == .active)
+                        .animation(.easeInOut(duration: 0.3))
+                        .padding()
+                }
+                .onMove(perform: moveItems(origin:destination:))
+                .onDelete(perform: deleteMovie)
+                .deleteDisabled(self.editMode == .active)
+            }
             .navigationTitle("Top Movies")
-            .navigationBarItems(leading: EditButton(), trailing: Button(action: {
+            .navigationBarItems(leading: editButton, trailing: Button(action: {
                 if !limited {
                     limited.toggle()
                     viewModel.limitMovies()
@@ -37,11 +35,30 @@ struct ContentView: View {
             }, label: {
                 Text("Limit")
             }))
+            .environment(\.editMode, self.$editMode)
         }
     }
     
-    func deleteMovie(moive: MovieViewModel) {
-        viewModel.deleteMovie(movie: moive)
+    private var editButton: some View {
+        if editMode == .inactive {
+            return Button(action: {
+                self.editMode = .active
+            }) {
+                Text("Edit")
+            }
+        }
+        else {
+            return Button(action: {
+                self.editMode = .inactive
+            }) {
+                Text("Done")
+            }
+        }
+    }
+    
+    
+    func deleteMovie(indexSet: IndexSet) {
+        viewModel.deleteMovie(index: indexSet)
     }
     
     func moveItems(origin: IndexSet, destination: Int) {

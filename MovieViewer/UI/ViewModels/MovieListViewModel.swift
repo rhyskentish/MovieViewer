@@ -35,13 +35,8 @@ class MovieListViewModel: ObservableObject {
         movies = Array(movies[randomIndex..<randomIndex+4])
     }
     
-    func deleteMovie(movie: MovieViewModel) {
-        let indexToRemove = movies.firstIndex { (movieToCheck) -> Bool in
-            return movie.id == movieToCheck.id
-        }
-        if let indexToRemove = indexToRemove {
-            movies.remove(at: indexToRemove)
-        }
+    func deleteMovie(index: IndexSet) {
+        movies.remove(atOffsets: index)
     }
     
 }
