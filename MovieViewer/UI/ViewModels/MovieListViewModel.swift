@@ -17,8 +17,12 @@ class MovieListViewModel: ObservableObject {
     
     @Published var error: String?
     
-    private func fetchAllMovies() {
+    @Published var isLoading = false
+    
+    func fetchAllMovies() {
+        isLoading = true
         MovieService().getAllMovies { (result) in
+            self.isLoading = false
             switch result {
             case .success(let movieResponse):
                 self.movies = movieResponse.items.map({ (movie) -> MovieViewModel in

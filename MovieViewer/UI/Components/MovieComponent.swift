@@ -60,6 +60,6 @@ struct MovieComponent: View {
 
 struct MovieComponent_Privews: PreviewProvider {
     static var previews: some View {
-        MovieComponent(movie: MovieViewModel(movie: Movie(id: "1", rank: "1", imDbRating: "8", fullTitle: "Some movie", image: "https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_UX128_CR0,3,128,176_AL_.jpg", crew: "")), isEditing: false)
+        MovieComponent(movie: MovieViewModel(movie: Movie(id: "1", rank: "1", imDbRating: "8", fullTitle: "Some movie", title: "movie", image: "https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_UX128_CR0,3,128,176_AL_.jpg", crew: "")), isEditing: false)
     }
 }

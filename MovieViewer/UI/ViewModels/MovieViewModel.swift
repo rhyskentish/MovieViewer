@@ -16,6 +16,10 @@ class MovieViewModel: Identifiable {
         self.movie = movie
     }
     
+    var title: String {
+        return self.movie.title
+    }
+    
     var fullTitle: String {
         return self.movie.fullTitle
     }

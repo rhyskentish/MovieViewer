@@ -16,26 +16,61 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
-            List{
-                ForEach(viewModel.movies) { movie in
-                    MovieComponent(movie: movie, isEditing: self.editMode == .active)
-                        .animation(.easeInOut(duration: 0.3))
-                        .padding()
+            if(viewModel.isLoading) {
+                Text("Loading...")
+            } else {
+                if let error = viewModel.error {
+                    VStack(alignment: .center, spacing: 8, content: {
+                        Text("Error")
+                        Text(error)
+                    })
+                } else {
+                    if(viewModel.movies.count == 0) {
+                        VStack(alignment: .center, spacing: 8, content: {
+                            Spacer()
+                            Text("No Data")
+                            Spacer()
+                            Button(action: {
+                                viewModel.fetchAllMovies()
+                            }) {
+                                Text("Fetch Data")
+                                    .frame(maxWidth: .infinity, minHeight: 44)
+                            }
+                            .foregroundColor(.white)
+                            .background(Color.blue)
+                            .cornerRadius(8)
+                            .padding()
+                        })
+                    } else {
+                        List{
+                            ForEach(viewModel.movies) { movie in
+                                ZStack {
+                                    NavigationLink(destination: MovieDetailView(movie: movie)) {
+                                        EmptyView()
+                                    }.hidden()
+                                    MovieComponent(movie: movie, isEditing: self.editMode == .active)
+                                        .animation(.easeInOut(duration: 0.3))
+                                        .padding()
+                                }
+                            }
+                            .onMove(perform: moveItems(origin:destination:))
+                            .onDelete(perform: deleteMovie)
+                            .deleteDisabled(self.editMode == .active)
+                        }
+                        .navigationTitle("Top Movies")
+                        .navigationBarItems(leading: editButton, trailing: Button(action: {
+                            if !limited {
+                                limited.toggle()
+                                viewModel.limitMovies()
+                            }
+                        }, label: {
+                            Text("Limit")
+                        }))
+                        .environment(\.editMode, self.$editMode)
+                    }
                 }
-                .onMove(perform: moveItems(origin:destination:))
-                .onDelete(perform: deleteMovie)
-                .deleteDisabled(self.editMode == .active)
+                
             }
-            .navigationTitle("Top Movies")
-            .navigationBarItems(leading: editButton, trailing: Button(action: {
-                if !limited {
-                    limited.toggle()
-                    viewModel.limitMovies()
-                }
-            }, label: {
-                Text("Limit")
-            }))
-            .environment(\.editMode, self.$editMode)
         }
     }
     

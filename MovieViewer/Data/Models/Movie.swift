@@ -12,6 +12,7 @@ struct Movie: Codable {
     let rank: String
     let imDbRating: String
     let fullTitle: String
+    let title: String
     let image: String
     let crew: String
 }
